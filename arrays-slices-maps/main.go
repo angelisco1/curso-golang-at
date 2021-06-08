@@ -18,6 +18,9 @@ func main() {
 	longitudArray := len(notasMatesFinales2)
 	fmt.Println(longitudArray)
 
+	ar4Elementos := [...]int{1, 2, 3, 4}
+	fmt.Println("4 Elementos: ", ar4Elementos)
+
 	/*  Slices  */
 	productosTienda := []string{"Tomate", "Maiz", "Cebolla", "Leche"}
 	// productosTienda[4] = "Pavo"
@@ -70,8 +73,84 @@ func main() {
 	fmt.Println(sl3)
 
 	fmt.Println(productosTienda2)
-	productosTienda4 := Pop(productosTienda2)
+	productosTienda4, _ := Pop(productosTienda2)
 	fmt.Println(productosTienda4)
+
+	datos := [][]int{
+		{1, 2, 3},
+		{4, 5},
+		{6, 7},
+	}
+	fmt.Println(datos[1][1])
+
+	/* Maps */
+	sugus := map[string]string{
+		"piña":    "azul",
+		"naranja": "naranja",
+		"limon":   "amarillo",
+		"fresa":   "",
+	}
+
+	fmt.Println(sugus)
+	fmt.Println(sugus["limon"])
+
+	if color, existe := sugus["fresa"]; existe {
+		fmt.Println(color)
+	} else {
+		fmt.Println("La clave no existe")
+	}
+
+	sugus["fresa"] = "rojo"
+	sugus["sandia"] = "rojo"
+	fmt.Println(sugus)
+
+	if _, existe := sugus["fresa"]; existe {
+		fmt.Println("La clave existe")
+	} else {
+		fmt.Println("La clave no existe")
+	}
+
+	delete(sugus, "fresa")
+
+	if _, existe := sugus["fresa"]; existe {
+		fmt.Println("La clave existe")
+	} else {
+		fmt.Println("La clave no existe")
+	}
+
+	// fmt.Println(existe)
+
+	notasPorTrimestre := map[string][]int{
+		"q1": {1, 7, 9},
+		"q2": {9, 7, 9},
+		"q3": {9, 7, 10},
+	}
+
+	fmt.Println(notasPorTrimestre["q3"][1])
+
+	slPrueba := []string{"a", "b", "c"}
+
+	slPrueba, item := Pop(slPrueba)
+	fmt.Println(item)
+	fmt.Println(slPrueba)
+
+	for k, v := range sugus {
+		fmt.Printf("Clave %s - Valor %s\n", k, v)
+	}
+
+	for i, v := range notasInglesFinales {
+		fmt.Printf("Pos %d - Valor %d\n", i, v)
+	}
+
+	for i, v := range productosTienda {
+		fmt.Printf("Pos %d - Valor %s\n", i, v)
+	}
+
+	for i, filas := range datos {
+		for j, columna := range filas {
+			fmt.Printf("Fila %d Columna %d - %d\n", i, j, columna)
+		}
+	}
 
 }
 
@@ -81,7 +160,7 @@ func suma(n1, n2 int) int {
 
 /* Pop */
 // Función Pop que recibe un slice y devuelve el slice sin el último elemento
-func Pop(slice []string) []string {
+func Pop(slice []string) ([]string, string) {
 	// return slice[0:len(slice)-1]
-	return slice[:len(slice)-1]
+	return slice[:len(slice)-1], slice[len(slice)-1]
 }
