@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/angelisco1/figura-geometrica"
 	"github.com/angelisco1/persona"
 	"github.com/fatih/color"
 )
@@ -43,4 +44,20 @@ func main() {
 	}
 	fmt.Println(p1)
 
+	c := figura.NewCirculo(4.0)
+	ImprimirFigura(c)
+
+	// var r *figura.Rectangulo
+	r := figura.NewRectangulo(2, 7)
+	ImprimirFigura(r)
+	ImprimirFiguraF(r)
+
+}
+
+func ImprimirFigura(f figura.Figura) {
+	fmt.Println("El área es: ", f.Area())
+}
+
+func ImprimirFiguraF(f figura.FiguraConF) {
+	fmt.Println("El área es: ", f.Area())
 }
