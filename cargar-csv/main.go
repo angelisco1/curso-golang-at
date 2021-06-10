@@ -1,16 +1,18 @@
 package main
 
 import (
-	"encoding/csv"
+	// "encoding/csv"
 	"fmt"
 	"os"
+
+	"github.com/gocarina/gocsv"
 )
 
 type Persona struct {
-	Nombre   string
-	Apellido string
-	Email    string
-	Rol      string
+	Nombre   string `csv:"nombre"`
+	Apellido string `csv:"apellidos"`
+	Email    string `csv:"email"`
+	Rol      string `csv:"rol"`
 }
 
 func NewPersona(n, a, e, r string) *Persona {
@@ -37,41 +39,59 @@ func main() {
 	file, _ := os.Open("data/colegio.csv")
 	defer file.Close()
 
-	filasCsv, _ := csv.NewReader(file).ReadAll()
+	// filasCsv, _ := csv.NewReader(file).ReadAll()
 
-	fmt.Println(filasCsv)
+	// var personas map[string]string
+	var personas []Persona
+	gocsv.UnmarshalFile(file, &personas)
+
+	fmt.Println(personas)
+
+	// fmt.Println(filasCsv)
 	var alumnos, profesores []Persona
 
-	for _, fila := range filasCsv {
-		p := NewPersona(fila[0], fila[1], fila[2], fila[3])
+	// for _, fila := range filasCsv {
+	// 	p := NewPersona(fila[0], fila[1], fila[2], fila[3])
+	// 	if p.Rol == "profesor" {
+	// 		profesores = append(profesores, *p)
+	// 	} else {
+	// 		alumnos = append(alumnos, *p)
+	// 	}
+	// }
+
+	for _, p := range personas {
 		if p.Rol == "profesor" {
-			profesores = append(profesores, *p)
+			profesores = append(profesores, p)
 		} else {
-			alumnos = append(alumnos, *p)
+			alumnos = append(alumnos, p)
 		}
 	}
 
-	fmt.Println(profesores)
-	fmt.Println(alumnos)
+	// fmt.Println(profesores)
+	// fmt.Println(alumnos)
 
-	crearArchivo(profesores, "data/profes.csv")
-	crearArchivo(alumnos, "data/alumnos.csv")
+	// crearArchivo(profesores, "data/profes.csv")
+	// crearArchivo(alumnos, "data/alumnos.csv")
+	crearArchivo(profesores, "data/profes-gocsv.csv")
+	crearArchivo(alumnos, "data/alumnos-gocsv.csv")
 
 }
 
 func crearArchivo(datos []Persona, nombreArchivo string) {
 	file, _ := os.Create(nombreArchivo)
-	writer := csv.NewWriter(file)
+	// writer := csv.NewWriter(file)
 
-	defer func() {
-		writer.Flush()
-		file.Close()
-	}()
+	// defer func() {
+	// 	writer.Flush()
+	// 	file.Close()
+	// }()
+	defer file.Close()
 
-	for _, p := range datos {
+	gocsv.MarshalFile(datos, file)
 
-		// fila := fmt.Sprintf("%s,%s,%s,%s", p.Nombre, p.Apellido, p.Email, p.Rol)
-		writer.Write([]string{p.Nombre, p.Apellido, p.Email, p.Rol})
-	}
+	// for _, p := range datos {
+	// 	// fila := fmt.Sprintf("%s,%s,%s,%s", p.Nombre, p.Apellido, p.Email, p.Rol)
+	// 	writer.Write([]string{p.Nombre, p.Apellido, p.Email, p.Rol})
+	// }
 
 }
